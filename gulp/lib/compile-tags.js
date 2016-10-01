@@ -16,13 +16,13 @@ var gulp = require("gulp"),
     compileDrafts = require("../lib/drafts"),
     promiseList = require("../lib/promises");
 
-module.exports.run = function (rootPath, done, error) {
-    var siteData = JSON.parse(fs.readFileSync(rootPath + "/site.json", "utf8"));
+module.exports = function (done, error) {
+    var siteData = JSON.parse(fs.readFileSync("./site.json", "utf8"));
     var gulpVersion = require("gulp/package").version;
-    var compileOptionsObj = compileOptions(rootPath);
+    var compileOptionsObj = compileOptions();
 
-    glob(rootPath + "/build/content/**/*.json", {
-        cwd: rootPath
+    glob("./build/content/**/*.json", {
+        cwd: "."
     }, function (err, files) {
         if (err) {
             error(err);
@@ -139,10 +139,10 @@ module.exports.run = function (rootPath, done, error) {
                             pageTemplateData.totalPages = totalPages;
 
                             promises.push(new Promise(function (resolve, reject) {
-                                gulp.src(rootPath + "/src/templates/index.hbs")
+                                gulp.src("./src/templates/index.hbs")
                                     .pipe(compileHandlebars(pageTemplateData, compileOptionsObj))
                                     .pipe(rename("index.html"))
-                                    .pipe(gulp.dest(rootPath + "/build/tag/" + tag + "/page/" + pageNumber))
+                                    .pipe(gulp.dest("./build/tag/" + tag + "/page/" + pageNumber))
                                     .on("error", reject)
                                     .on("end", resolve);
                             }));
@@ -154,10 +154,10 @@ module.exports.run = function (rootPath, done, error) {
                     }
 
                     promises.push(new Promise(function (resolve, reject) {
-                        gulp.src(rootPath + "/src/templates/index.hbs")
+                        gulp.src("./src/templates/index.hbs")
                             .pipe(compileHandlebars(templateData, compileOptionsObj))
                             .pipe(rename("index.html"))
-                            .pipe(gulp.dest(rootPath + "/build/tag/" + tag))
+                            .pipe(gulp.dest("./build/tag/" + tag))
                             .on("error", reject)
                             .on("end", resolve);
                     }));

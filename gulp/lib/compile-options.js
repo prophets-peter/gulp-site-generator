@@ -6,9 +6,9 @@ var moment = require("moment"),
     downzero = require("./downzero"),
     stringUtils = require("mout/string");
 
-module.exports = function (rootPath) {
+module.exports = function () {
     return {
-        batch: [rootPath + "/src/templates/partials"],
+        batch: ["./src/templates/partials"],
         checkContent: function (fileData) {
             var excerpt = stringUtils.stripHtmlTags(fileData.body);
             excerpt = excerpt.replace(/(\r\n|\n|\r)+/gm, " ");
@@ -91,7 +91,7 @@ module.exports = function (rootPath) {
                 if (path && this.resourcePath && this.resourcePath !== "") {
                     return this.resourcePath + path;
                 }
-                return "." + path;
+                return "" + path;
             },
             or: function (v1, v2) {
                 return v1 || v2;

@@ -16,13 +16,13 @@ var gulp = require("gulp"),
     compileDrafts = require("../lib/drafts"),
     promiseList = require("../lib/promises");
 
-module.exports.run = function (rootPath, done, error) {
-    var siteData = JSON.parse(fs.readFileSync(rootPath + "/site.json", "utf8"));
+module.exports = function (done, error) {
+    var siteData = JSON.parse(fs.readFileSync("./site.json", "utf8"));
     var gulpVersion = require("gulp/package").version;
-    var compileOptionsObj = compileOptions(rootPath);
+    var compileOptionsObj = compileOptions();
 
-    glob(rootPath + "/build/content/**/*.json", {
-        cwd: rootPath
+    glob("./build/content/**/*.json", {
+        cwd: "."
     }, function (err, files) {
         if (err) {
             error(err);
@@ -81,11 +81,11 @@ module.exports.run = function (rootPath, done, error) {
                     rss: ".." + siteData.rss
                 };
 
-                var outDir = rootPath + "/build/" + path.basename(file).replace(/\.[^/.]+$/, "");
+                var outDir = "./build/" + path.basename(file).replace(/\.[^/.]+$/, "");
 
                 templatesToCreate.push({
                     outDir: outDir,
-                    templateSrc: rootPath + "/src/templates/" + fileData.template,
+                    templateSrc: "./src/templates/" + fileData.template,
                     templateData: templateData
                 });
 

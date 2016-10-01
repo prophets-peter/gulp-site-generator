@@ -9,12 +9,12 @@ var fs = require("fs"),
     resolvePaths = require("../lib/paths"),
     compileDrafts = require("../lib/drafts");
 
-module.exports.run = function (rootPath, done, error) {
-    var siteData = JSON.parse(fs.readFileSync(rootPath + "/site.json", "utf8"));
+module.exports = function (done, error) {
+    var siteData = JSON.parse(fs.readFileSync("./site.json", "utf8"));
     var gulpVersion = require("gulp/package").version;
 
-    glob(rootPath + "/build/content/posts/*.json", {
-        cwd: rootPath
+    glob("./build/content/posts/*.json", {
+        cwd: "."
     }, function (err, files) {
         if (err) {
             error(err);
@@ -65,7 +65,7 @@ module.exports.run = function (rootPath, done, error) {
 
                 var xml = feed.xml();
 
-                fs.writeFile(rootPath + "/build/rss.xml", xml, {
+                fs.writeFile("./build/rss.xml", xml, {
                     encoding: "utf8"
                 }, function (err) {
                     if (err) {

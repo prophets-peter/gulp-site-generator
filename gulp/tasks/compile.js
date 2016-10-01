@@ -13,29 +13,19 @@ gulp.task("compile", ["content"], function (done) {
     var compilePromises = [];
 
     // pages
-    compilePromises.push(new Promise(function (resolve, reject) {
-        compilePages.run(".", resolve, reject);
-    }));
+    compilePromises.push(new Promise(compilePages));
 
     // tags
-    compilePromises.push(new Promise(function (resolve, reject) {
-        compileTags.run(".", resolve, reject);
-    }));
+    compilePromises.push(new Promise(compileTags));
 
     // dates
-    compilePromises.push(new Promise(function (resolve, reject) {
-        compileDates.run(".", resolve, reject);
-    }));
+    compilePromises.push(new Promise(compileDates));
 
     // rss feed compilation
-    compilePromises.push(new Promise(function (resolve, reject) {
-        compileRss.run(".", resolve, reject);
-    }));
+    compilePromises.push(new Promise(compileRss));
 
     // index page generation
-    compilePromises.push(new Promise(function (resolve, reject) {
-        compileHome.run(".", resolve, reject);
-    }));
+    compilePromises.push(new Promise(compileHome));
 
     Promise.all(compilePromises)
         .then(function () {

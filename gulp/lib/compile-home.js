@@ -16,13 +16,13 @@ var gulp = require("gulp"),
     compileDrafts = require("../lib/drafts"),
     promiseList = require("../lib/promises");
 
-module.exports.run = function (rootPath, done, error) {
-    var siteData = JSON.parse(fs.readFileSync(rootPath + "/site.json", "utf8"));
+module.exports = function (done, error) {
+    var siteData = JSON.parse(fs.readFileSync("./site.json", "utf8"));
     var gulpVersion = require("gulp/package").version;
-    var compileOptionsObj = compileOptions(rootPath);
+    var compileOptionsObj = compileOptions();
 
-    glob(rootPath + "/build/content/**/*.json", {
-        cwd: rootPath
+    glob("./build/content/**/*.json", {
+        cwd: "."
     }, function (err, files) {
         if (err) {
             error(err);
@@ -43,10 +43,10 @@ module.exports.run = function (rootPath, done, error) {
 
                 var metaData = {
                     title: fileData.title,
-                    description: resolvePaths.resolve(fileData.body, "."),
-                    url: "./" + fileData.slug + "/",
+                    description: resolvePaths.resolve(fileData.body, ""),
+                    url: fileData.slug + "/",
                     tagStr: fileData.tags,
-                    tags: (fileData.tags ? tags.getTagsAsLinks(".", fileData.tags) : undefined),
+                    tags: (fileData.tags ? tags.getTagsAsLinks("", fileData.tags) : undefined),
                     date: fileData.date,
                     post_class: "post " + (fileData.template === "page.hbs" ? "page " : "") + (fileData.tags ? tags.getTagClasses(fileData.tags) : fileData.slug),
                     meta: fileData
@@ -65,17 +65,17 @@ module.exports.run = function (rootPath, done, error) {
 
                 var templateData = {
                     date: moment().format("YYYY-MM-DD"),
-                    resourcePath: ".",
+                    resourcePath: "",
                     generator: "Gulp " + gulpVersion,
                     meta_title: siteData.title,
-                    url: ".",
+                    url: "",
                     site: siteData,
                     posts: posts,
                     pages: pages,
                     body_class: "home-template",
-                    rss: "." + siteData.rss,
-                    allDates: dates.getAllDatesAsLinks(".", allPosts),
-                    allTags: tags.getAllTagsAsLinks(".", allPosts)
+                    rss: siteData.rss,
+                    allDates: dates.getAllDatesAsLinks("", allPosts),
+                    allTags: tags.getAllTagsAsLinks("", allPosts)
                 };
 
                 var promises = [];
@@ -123,10 +123,10 @@ module.exports.run = function (rootPath, done, error) {
                         pageTemplateData.totalPages = totalPages;
 
                         promises.push(new Promise(function (resolve, reject) {
-                            gulp.src(rootPath + "/src/templates/index.hbs")
+                            gulp.src("./src/templates/index.hbs")
                                 .pipe(compileHandlebars(pageTemplateData, compileOptionsObj))
                                 .pipe(rename("index.html"))
-                                .pipe(gulp.dest(rootPath + "/build/page/" + pageNumber))
+                                .pipe(gulp.dest("./build/page/" + pageNumber))
                                 .on("error", reject)
                                 .on("end", function () {
                                     resolve();
@@ -140,10 +140,10 @@ module.exports.run = function (rootPath, done, error) {
                 }
 
                 promises.unshift(new Promise(function (resolve, reject) {
-                    gulp.src(rootPath + "/src/templates/index.hbs")
+                    gulp.src("./src/templates/index.hbs")
                         .pipe(compileHandlebars(templateData, compileOptionsObj))
                         .pipe(rename("index.html"))
-                        .pipe(gulp.dest(rootPath + "/build"))
+                        .pipe(gulp.dest("./build"))
                         .on("error", reject)
                         .on("end", resolve);
                 }));
