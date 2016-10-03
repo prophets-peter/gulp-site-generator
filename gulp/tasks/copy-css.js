@@ -6,7 +6,7 @@ var gulp = require("gulp"),
 
 gulp.task("copy-css", function () {
     var siteData = JSON.parse(fs.readFileSync("./site.json", "utf8"));
-    var styleSheet = "style.css";
+    var styleSheet = "app.css";
     if (siteData.styleSheet) {
         styleSheet = siteData.styleSheet;
     }

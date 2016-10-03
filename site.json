@@ -5,9 +5,9 @@
   "rss": "/rss.xml",
   "maxItems": 6,
   "concatJs": [
-    "./src/js/*.js"
+    "./src/js/app.js"
   ],
-  "styleSheet": "style.css",
+  "styleSheet": "app.css",
   "authors": {
     "Matt Levy": {
       "name": "Matt Levy",

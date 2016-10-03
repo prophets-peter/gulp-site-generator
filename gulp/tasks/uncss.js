@@ -7,7 +7,7 @@ var gulp = require("gulp"),
     rename = require("gulp-rename");
 
 gulp.task("uncss", ["compile"], function () {
-    return gulp.src("./src/css/style.css")
+    return gulp.src("./src/css/app.css")
         .pipe(uncss({
             html: glob.sync("./build/**/*.html")
         }))
