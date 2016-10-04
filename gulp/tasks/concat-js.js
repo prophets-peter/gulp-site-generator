@@ -7,6 +7,7 @@ const
     buffer = require('vinyl-buffer'),
     uglify = require('gulp-uglify'),
     sourcemaps = require('gulp-sourcemaps'),
+    gutil = require('gulp-util'),
     eslint = require('gulp-eslint');
 
 gulp.task('concat-js', function() {
